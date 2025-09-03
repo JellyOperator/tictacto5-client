@@ -5,12 +5,20 @@ public class ConfirmPanelController : PanelController
 {
     [SerializeField] private TMP_Text messageText;
 
+    //Hide에 받아야하는 delegate를 알 길이 없기 때문에
+    //delegate를 선언해 줘야함
+    public delegate void OnConfirmButtonClicked();
+    //ㄴConfirm버튼 클릭시 호출됨
+    private OnConfirmButtonClicked _onConfirmButtonClicked;
+
+
     /// <summary>
     /// Confirm Panel을 표시하는 메서드
     /// </summary>
-    public void Show(string message)
+    public void Show(string message, OnConfirmButtonClicked onConfirmButtonClicked)
     {
         messageText.text = message;
+        _onConfirmButtonClicked = onConfirmButtonClicked;
         base.Show();
     }
 

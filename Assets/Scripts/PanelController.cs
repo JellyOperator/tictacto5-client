@@ -9,7 +9,9 @@ public class PanelController : MonoBehaviour
     [SerializeField] private RectTransform panelRectTransform;
 
     private CanvasGroup _backgroundCanvasGroup;
-
+    
+    // Panel이 Hide 될 때 해야 할 동작을 전달받을 함수의 형식
+    public delegate void PanelControllerHideDelegate();
     private void Awake()
     {
         _backgroundCanvasGroup = GetComponent<CanvasGroup>();
@@ -30,12 +32,17 @@ public class PanelController : MonoBehaviour
     /// <summary>
     /// Panel 숨기기
     /// </summary>
-    public void Hide()
+    public void Hide(PanelControllerHideDelegate hideDelegate = null)
     {
         _backgroundCanvasGroup.alpha = 1;
         panelRectTransform.localScale = Vector3.one;
 
         _backgroundCanvasGroup.DOFade(0, 0.3f).SetEase(Ease.Linear);
-        panelRectTransform.DOScale(0, 0.3f).SetEase(Ease.InBack);
+        panelRectTransform.DOScale(0, 0.3f).SetEase(Ease.InBack)
+        .OnComplete(() =>
+         {
+             hideDelegate?.Invoke();
+             Destroy(gameObject);
+         });
     }
 }
