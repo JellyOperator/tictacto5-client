@@ -27,7 +27,10 @@ public class ConfirmPanelController : PanelController
     /// </summary>
     public void OnClickConfirmButton()
     {
-        Hide();
+        Hide(() =>
+        {
+            _onConfirmButtonClicked?.Invoke();
+        });
     }
 
     /// <summary>
